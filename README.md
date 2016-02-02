@@ -14,3 +14,5 @@ oe_run_phy_one_shank(path_to_data, folder_experiment_id, folder_to_write,shanks)
 The layout for each probe MUST be changed to obtain meaningful results in the file: 
 oeprobe_cambr
 It is written to facilitate copy/pasting vertically the layouts. For reference, see the picture of the probe with ID 'mmy1' in https://mmyros.github.io/github.io/cambr_intan.html
+
+The file oe2dat creates a large binary data file that phy can use from smaller .continuous files for each channel which are created by open ephys system. It is easy to modify it for any other recording system as long as you can load the raw files in Matlab.
