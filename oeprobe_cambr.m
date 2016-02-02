@@ -1,5 +1,7 @@
 function MAP=oeprobe_cambr(Shank,probename)
 %% oeprobe_cambr(shank,probename[opt])
+% You HAVE to change this file to get a sane layout of probe sites! 
+% Refer to site map - it's different for every probe
 % in=1:16;
 if nargin<2
     probename='mmy1';
@@ -46,7 +48,7 @@ for shank=Shank
                         ] ;
             end
         otherwise
-            disp('No such probe silly!')
+            disp('No such probe silly! Create your own map please')
     end
     if ~strcmp(probename,'test')
         %% stagger rows of electrodes (columns of map)

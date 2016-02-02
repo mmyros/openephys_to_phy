@@ -1,5 +1,9 @@
 function oe_run_phy_one_shank(path_to_data, folder_experiment_id, folder_to_write,shanks, dowait, doconvert_only)
-% oe_run_phy_one_shank(path_to_data, folder_experiment_id, folder_to_write,shanks, dowait, dotest)
+%% Required inputs: path to data, name of experiment, output folder
+%% Optional: consecutive number of shanks to run, whether to wait for
+% completion of each shank, whether to convert open-ephys files without
+% running phy
+%% oe_run_phy_one_shank(path_to_data, folder_experiment_id, folder_to_write,shanks, dowait, dotest)
 % path_to_data='~/data/oe/';
 % folder_experiment_id='md53d_2016-01-14_19-18-01/'
 % folder_to_write= '~/res/oe/'
