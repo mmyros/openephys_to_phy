@@ -40,13 +40,15 @@ if (nargin == 1)
     output_directory = input_directory;
 else
     output_directory = varargin{2};
-    mkdir(output_directory)
+
 end
 
+mkdir(output_directory)
 
-% copyfile('~/Dropbox/spikesort/phy/probes/neuronexus/cambridge_1shank.prb',output_directory)
 
-copyfile('~/Dropbox/spikesort/phy/config/100_raw.prm',output_directory)
+copyfile('~/Dropbox/spikesort/phy/probes/cambridge/cambridge_1shank_mmy1.prb',output_directory)
+
+
 
 info = get_session_info(input_directory);
 
@@ -60,12 +62,12 @@ disp(kwikfile)
     
 info.kwikfile = kwikfile;
     
-if numel(dir([kwikfile]))
-    delete(kwikfile)
-end
-
-fid = H5F.create(kwikfile);
-h5writeatt(kwikfile, '/', 'kwik_version', '2')
+% if numel(dir([kwikfile]))
+%     delete(kwikfile)
+% end
+% 
+% fid = H5F.create(kwikfile);
+% h5writeatt(kwikfile, '/', 'kwik_version', '2')
 
 
 %%
@@ -86,27 +88,37 @@ for processor = find(~cellfun(@isempty,info.processors(:,3))')
     
         kwdfile = [get_full_path(output_directory) filesep ...
             int2str(info.processors{processor,1}) '_raw.kwd'];
-
-        if numel(dir([kwdfile]))
-            delete(kwdfile)
-        end
+% 
+%         if numel(dir([kwdfile]))
+%             delete(kwdfile)
+%         end
+        %% Preallocate
+        filename_in = [input_directory filesep ...
+            int2str(info.processors{processor, 1}) ...
+            '_CH' int2str(1) '.continuous'];
+        [data] = load_open_ephys_data_faster(filename_in);
+        ldata=length(data);
+        clear data
+        Data=zeros(length(recorded_channels), ldata,'int16');
+        %% Loop over channels
         indch=0;
         for ch = recorded_channels
             indch=indch+1;
             filename_in = [input_directory filesep ...
                 int2str(info.processors{processor, 1}) ...
                 '_CH' int2str(ch) '.continuous'];
-            [data, timestamps, info_continuous] = load_open_ephys_data_faster(filename_in);
+            [data] = load_open_ephys_data_faster(filename_in);
             
 %             ch=ch-min(recorded_channels)+1;
             
-            Data(indch,:)=int16(data);
-        
+            Data(indch,:)=(data);
+
+            clear data
         end
         
-        Data=int16(Data);
+%         Data=int16(Data);
         %%
-        fid=fopen([output_directory '/100_raw.dat'],'w+');
+        fid=fopen([output_directory '/100_raw.dat'],'w');
         fwrite(fid,Data,'int16')
 %         clf,fid=fopen([output_directory '/100_raw.dat']);z=fread(fid,inf,'int16');whos z;plot(z(1:2e4))
     end
